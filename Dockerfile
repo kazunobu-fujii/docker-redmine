@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-MAINTAINER Yorimoto Komori
+MAINTAINER Yorimoto Komori <komori@miraitechno.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y curl ruby && gem install bundler
