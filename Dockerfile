@@ -1,21 +1,26 @@
-FROM debian:jessie
+FROM ruby:2.1.3
 
-MAINTAINER Yorimoto Komori <komori@miraitechno.com>
+MAINTAINER Miraitechno, Inc.
 
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update && apt-get install -y curl ruby && gem install bundler
-RUN apt-get install -y ruby-ffi ruby-nokogiri ruby-redcarpet ruby-rmagick ruby-mysql2 unicorn
-
+RUN apt-get update && apt-get -y upgrade && apt-get install -y unzip
 RUN curl -L http://www.redmine.org/releases/redmine-2.5.2.tar.gz | tar -zx && mv redmine-2.5.2 /var/lib/redmine && chown -R root. /var/lib/redmine
+
+WORKDIR /var/lib/redmine/public/themes
+RUN git clone git://github.com/makotokw/redmine-theme-gitmike.git gitmike
+RUN git clone git://github.com/farend/redmine_theme_farend_basic.git farend_basic
+RUN git clone git://github.com/farend/redmine_theme_farend_fancy.git farend_fancy
+RUN git clone git://github.com/AlphaNodes/bavarian_dawn.git bavarian_dawn
+RUN hg clone http://code.lasolution.be/a-responsive-1 a-responsive-1
+RUN curl -O http://redminecrm.com/license_manager/14517/a1_theme-1_1_3.zip && unzip a1_theme-1_1_3.zip
+
 WORKDIR /var/lib/redmine
-
 COPY config/ /var/lib/redmine/config/
-RUN useradd -s /bin/nologin redmine && \
-  chown redmine files && \
-  sed -i -e 's/gem "redcarpet", "~> 2.3.0"/gem "redcarpet", "~> 3.1"/g' Gemfile && \
-  echo 'gem "unicorn"' >> Gemfile && \
-  bundle install --without development test rmagick
+RUN echo 'gem "unicorn"' >> Gemfile && bundle install --without development test rmagick
+RUN useradd -m -s /bin/nologin redmine && \
+  mkdir public/plugin_assets && \
+  chown -R redmine files tmp public/plugin_assets
 
-CMD /bin/sh config/startup.sh
+CMD HOME=/home/redmine /bin/sh config/startup.sh
 
 EXPOSE 8080

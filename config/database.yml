@@ -1,7 +1,8 @@
 production:
   adapter: mysql2
-  database: redmine
-  host: localhost
-  username: root
-  password: ""
+  database: <%= ENV['MYSQL_ENV_DB_NAME'] || "" %>
+  host: <%= ENV['MYSQL_PORT_3306_TCP_ADDR'] || "localhost" %>
+  port: <%= ENV['MYSQL_PORT_3306_TCP_PORT'] || "3306" %>
+  username: <%= ENV['MYSQL_ENV_DB_USER'] || "" %>
+  password: <%= ENV['MYSQL_ENV_DB_PASS'] || "" %>
   encoding: utf8
