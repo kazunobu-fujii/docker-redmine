@@ -14,13 +14,22 @@ RUN git clone git://github.com/AlphaNodes/bavarian_dawn.git bavarian_dawn
 RUN hg clone http://code.lasolution.be/a-responsive-1 a-responsive-1
 RUN curl -O http://redminecrm.com/license_manager/14517/a1_theme-1_1_3.zip && unzip a1_theme-1_1_3.zip
 
+WORKDIR /var/lib/redmine/plugins
+RUN git clone git://github.com/backlogs/redmine_backlogs.git redmine_backlogs && \
+    cp redmine_backlogs/lib/labels/labels.yaml.default redmine_backlogs/lib/labels/labels.yaml
+
 WORKDIR /var/lib/redmine
-COPY config/ /var/lib/redmine/config/
-RUN echo 'gem "unicorn"' >> Gemfile && bundle install --without development test rmagick
+RUN echo 'production:\n  adapter: mysql2' >> config/database.yml && \
+    echo 'gem "unicorn"' >> Gemfile && \
+    bundle install --without development test rmagick
 RUN useradd -m -s /bin/nologin redmine && \
-  mkdir public/plugin_assets && \
-  chown -R redmine files tmp public/plugin_assets
+    mkdir public/plugin_assets && \
+    chown -R redmine files tmp public/plugin_assets
+RUN echo 'ActionController::Base.relative_url_root = ENV["URL_ROOT"] if ENV["URL_ROOT"]' >> config/environment.rb && \
+    sed -i -e 's/^run /#run /' config.ru && \
+    echo 'map ActionController::Base.relative_url_root || "/" do\n  run RedmineApp::Application\nend' >> config.ru
+COPY config/ /var/lib/redmine/config/
 
 CMD HOME=/home/redmine /bin/sh config/startup.sh
-
+ENV REDMINE_LANG en
 EXPOSE 8080
