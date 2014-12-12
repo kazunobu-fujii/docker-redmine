@@ -1,10 +1,10 @@
-FROM ruby:2.1.3
+FROM ruby:2.1.5
 
 MAINTAINER Miraitechno, Inc.
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y unzip
-RUN curl -L http://www.redmine.org/releases/redmine-2.5.2.tar.gz | tar -zx && mv redmine-2.5.2 /var/lib/redmine && chown -R root. /var/lib/redmine
+RUN curl -L http://www.redmine.org/releases/redmine-2.6.0.tar.gz | tar -zx && mv redmine-2.6.0 /var/lib/redmine && chown -R root. /var/lib/redmine
 
 WORKDIR /var/lib/redmine/public/themes
 RUN git clone git://github.com/makotokw/redmine-theme-gitmike.git gitmike
