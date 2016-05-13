@@ -1,10 +1,10 @@
-FROM ruby:2.1.5
+FROM ruby:2.3.1
 
 MAINTAINER Miraitechno, Inc.
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y unzip
-RUN curl -L http://www.redmine.org/releases/redmine-2.6.10.tar.gz | tar -zx && mv redmine-2.6.10 /var/lib/redmine && chown -R root. /var/lib/redmine
+RUN curl -L http://www.redmine.org/releases/redmine-3.2.2.tar.gz | tar -zx && mv redmine-3.2.2 /var/lib/redmine && chown -R root. /var/lib/redmine
 
 WORKDIR /var/lib/redmine/public/themes
 RUN git clone git://github.com/makotokw/redmine-theme-gitmike.git gitmike
@@ -12,10 +12,6 @@ RUN git clone git://github.com/farend/redmine_theme_farend_basic.git farend_basi
 RUN git clone git://github.com/farend/redmine_theme_farend_fancy.git farend_fancy
 RUN git clone git://github.com/AlphaNodes/bavarian_dawn.git bavarian_dawn
 RUN hg clone http://code.lasolution.be/a-responsive-1 a-responsive-1
-
-WORKDIR /var/lib/redmine/plugins
-RUN git clone git://github.com/kazunobu-fujii/redmine_backlogs.git redmine_backlogs && \
-    cp redmine_backlogs/lib/labels/labels.yaml.default redmine_backlogs/lib/labels/labels.yaml
 
 WORKDIR /var/lib/redmine
 RUN echo 'production:\n  adapter: mysql2' >> config/database.yml && \
