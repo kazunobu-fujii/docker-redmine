@@ -4,7 +4,7 @@ MAINTAINER Miraitechno, Inc.
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y unzip
-RUN curl -L http://www.redmine.org/releases/redmine-3.2.2.tar.gz | tar -zx && mv redmine-3.2.2 /var/lib/redmine && chown -R root. /var/lib/redmine
+RUN curl -L http://www.redmine.org/releases/redmine-3.3.0.tar.gz | tar -zx && mv redmine-3.3.0 /var/lib/redmine && chown -R root. /var/lib/redmine
 
 WORKDIR /var/lib/redmine/public/themes
 RUN git clone git://github.com/makotokw/redmine-theme-gitmike.git gitmike
