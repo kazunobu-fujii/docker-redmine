@@ -10,8 +10,6 @@ WORKDIR /var/lib/redmine/public/themes
 RUN git clone git://github.com/makotokw/redmine-theme-gitmike.git gitmike
 RUN git clone git://github.com/farend/redmine_theme_farend_basic.git farend_basic
 RUN git clone git://github.com/farend/redmine_theme_farend_fancy.git farend_fancy
-RUN git clone git://github.com/AlphaNodes/bavarian_dawn.git bavarian_dawn
-RUN hg clone http://code.lasolution.be/a-responsive-1 a-responsive-1
 
 WORKDIR /var/lib/redmine
 RUN echo 'production:\n  adapter: mysql2' >> config/database.yml && \
