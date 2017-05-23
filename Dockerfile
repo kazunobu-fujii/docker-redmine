@@ -4,14 +4,12 @@ MAINTAINER Miraitechno, Inc.
 
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y unzip
-RUN curl -L http://www.redmine.org/releases/redmine-3.3.0.tar.gz | tar -zx && mv redmine-3.3.0 /var/lib/redmine && chown -R root. /var/lib/redmine
+RUN curl -L http://www.redmine.org/releases/redmine-3.1.2.tar.gz | tar -zx && mv redmine-3.1.2 /var/lib/redmine && chown -R root. /var/lib/redmine
 
 WORKDIR /var/lib/redmine/public/themes
 RUN git clone git://github.com/makotokw/redmine-theme-gitmike.git gitmike
 RUN git clone git://github.com/farend/redmine_theme_farend_basic.git farend_basic
 RUN git clone git://github.com/farend/redmine_theme_farend_fancy.git farend_fancy
-RUN git clone git://github.com/AlphaNodes/bavarian_dawn.git bavarian_dawn
-RUN hg clone http://code.lasolution.be/a-responsive-1 a-responsive-1
 
 WORKDIR /var/lib/redmine
 RUN echo 'production:\n  adapter: mysql2' >> config/database.yml && \
